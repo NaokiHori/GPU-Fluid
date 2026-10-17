@@ -9,6 +9,8 @@ GPGPU Direct Numerical Simulator on Apple Silicon.
 
 ## Usage
 
+Visit one of the directories and execute:
+
 ```bash
 make output
 make all

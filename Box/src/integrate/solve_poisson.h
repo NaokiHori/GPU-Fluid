@@ -9,21 +9,19 @@
 #include "flow_field.h"
 #include "flow_solver.h"
 #include "./runge_kutta.h"
+#include "./solve_poisson/compute_right_hand_side.h"
+#include "./solve_poisson/solve_poisson_x.h"
+#include "./solve_poisson/solve_poisson_y.h"
 
 typedef struct {
   // common
-  id<MTLBuffer> eigenvalues;
   id<MTLBuffer> buf;
   // x: gemm
-  compute_pipeline_t compute_pipeline_x;
-  id<MTLBuffer> forward_operator;
-  id<MTLBuffer> backward_operator;
+  solve_poisson_x_data_t solve_poisson_x_data;
   // y: tdma
-  compute_pipeline_t compute_pipeline_y;
-  id<MTLBuffer> lower_diagonals;
-  id<MTLBuffer> upper_diagonals;
+  solve_poisson_y_data_t solve_poisson_y_data;
   // setup
-  compute_pipeline_t compute_pipeline_rhs;
+  compute_right_hand_side_data_t compute_right_hand_side_data;
 } solve_poisson_data_t;
 
 extern int solve_poisson_data_initialize(

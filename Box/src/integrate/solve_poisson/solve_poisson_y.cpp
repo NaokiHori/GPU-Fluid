@@ -2,7 +2,7 @@
 
 using namespace metal;
 
-kernel void tdma_y(
+kernel void solve_poisson_y(
     device const float * const lower_diagonals [[buffer(0)]],
     device const float * const upper_diagonals [[buffer(1)]],
     device const float * const eigenvalues [[buffer(2)]],

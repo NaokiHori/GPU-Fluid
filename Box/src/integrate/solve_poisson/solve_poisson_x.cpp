@@ -3,7 +3,7 @@
 using namespace metal;
 
 // apply linear transform "a" of size Nx against "b"
-kernel void gemm_x(
+kernel void solve_poisson_x(
     // Nx rows, Nx columns
     device const float * const a [[buffer(0)]],
     // Ny rows, Nx columns

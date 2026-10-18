@@ -14,15 +14,6 @@ static int init_ux(
       ptr_ux[j * (nx + 2) + i] = 0.f;
     }
   }
-  for (size_t j = 1; j <= ny; j++) {
-    ptr_ux[j * (nx + 2) + 0] = 0.f;
-    ptr_ux[j * (nx + 2) + 1] = 0.f;
-    ptr_ux[j * (nx + 2) + nx + 1] = 0.f;
-  }
-  for (size_t i = 1; i <= nx; i++) {
-    ptr_ux[(0) * (nx + 2) + i] = 0.f;
-    ptr_ux[(ny + 1) * (nx + 2) + i] = 0.f;
-  }
   return 0;
 }
 
@@ -37,15 +28,6 @@ static int init_uy(
     for (size_t i = 1; i <= nx; i++) {
       ptr_uy[j * (nx + 2) + i] = 0.f;
     }
-  }
-  for (size_t j = 1; j <= ny; j++) {
-    ptr_uy[j * (nx + 2) + 0] = 0.f;
-    ptr_uy[j * (nx + 2) + nx + 1] = 0.f;
-  }
-  for (size_t i = 1; i <= nx; i++) {
-    ptr_uy[(0) * (nx + 2) + i] = 0.f;
-    ptr_uy[(1) * (nx + 2) + i] = 0.f;
-    ptr_uy[(ny + 1) * (nx + 2) + i] = 0.f;
   }
   return 0;
 }
@@ -62,7 +44,6 @@ static int init_p(
       ptr_p[j * (nx + 2) + i] = 0.f;
     }
   }
-  // boundary conditions are implied in Poisson equation
   return 0;
 }
 
@@ -78,14 +59,6 @@ static int init_temperature(
     for (size_t i = 1; i <= nx; i++) {
       ptr_temperature[j * (nx + 2) + i] = amplitude * (- 0.5f + 1.f * rand() / RAND_MAX);
     }
-  }
-  for (size_t j = 1; j <= ny; j++) {
-    ptr_temperature[j * (nx + 2) + 0] = 0.f;
-    ptr_temperature[j * (nx + 2) + nx + 1] = 0.f;
-  }
-  for (size_t i = 1; i <= nx; i++) {
-    ptr_temperature[(0) * (nx + 2) + i] = 0.5f;
-    ptr_temperature[(ny + 1) * (nx + 2) + i] = - 0.5f;
   }
   return 0;
 }

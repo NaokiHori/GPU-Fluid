@@ -72,27 +72,26 @@ int process_on_gpu_check_divergence(
 
 int process_on_cpu_check_divergence(
     check_divergence_data_t * const check_divergence_data,
-    const size_t step,
-    const double time
+    double * const total_divergence,
+    double * const max_divergence
 ) {
-  double total_divergence = 0.;
-  double max_divergence = 0.;
+  *total_divergence = 0.;
+  *max_divergence = 0.;
   const float * const divergence_sums = [check_divergence_data->mtl_buffer_divergence_sums contents];
   for (NSUInteger j = 0; j < check_divergence_data->num_groups_y; j++) {
     for (NSUInteger i = 0; i < check_divergence_data->num_groups_x; i++) {
-      total_divergence += divergence_sums[j * check_divergence_data->num_groups_x + i];
+      *total_divergence += divergence_sums[j * check_divergence_data->num_groups_x + i];
     }
   }
   const float * const divergence_maxs = [check_divergence_data->mtl_buffer_divergence_maxs contents];
   for (NSUInteger j = 0; j < check_divergence_data->num_groups_y; j++) {
     for (NSUInteger i = 0; i < check_divergence_data->num_groups_x; i++) {
-      max_divergence = fmaxf(
-          max_divergence,
+      *max_divergence = fmax(
+          *max_divergence,
           divergence_maxs[j * check_divergence_data->num_groups_x + i]
       );
     }
   }
-  printf("%zu % .7e % .7e % .7e\n", step, time, total_divergence, max_divergence);
   return 0;
 }
 

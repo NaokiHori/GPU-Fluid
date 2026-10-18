@@ -1,6 +1,29 @@
 #include "./monitor.h"
 #include "./monitor/check_divergence.h"
 
+#define ROOT_DIRECTORY "output/log/"
+
+static int output(
+    const size_t step,
+    const double time,
+    const char file_name[],
+    const size_t nitems,
+    const double * quantities
+) {
+  errno = 0;
+  FILE * const fp = fopen(file_name, "a");
+  if (NULL == fp) {
+    perror(file_name);
+    return 1;
+  }
+  fprintf(fp, "%10zu % .15e ", step, time);
+  for (size_t n = 0; n < nitems; n++) {
+    fprintf(fp, "% .15e%c", quantities[n], nitems - 1 == n ? '\n' : ' ');
+  }
+  fclose(fp);
+  return 0;
+}
+
 static int process_on_gpu(
     id<MTLCommandQueue> queue,
     monitor_data_t * const monitor_data,
@@ -21,7 +44,16 @@ static int process_on_cpu(
     const size_t step,
     const double time
 ) {
-  process_on_cpu_check_divergence(&monitor_data->check_divergence_data, step, time);
+  printf("step %zu time % .15e\n", step, time);
+  const char file_name[] = ROOT_DIRECTORY "divergence.dat";
+  double total_divergence = 0.;
+  double max_divergence = 0.;
+  process_on_cpu_check_divergence(
+      &monitor_data->check_divergence_data,
+      &total_divergence,
+      &max_divergence
+  );
+  output(step, time, file_name, 2, (double []){total_divergence, max_divergence});
   return 0;
 }
 

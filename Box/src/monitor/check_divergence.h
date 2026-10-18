@@ -4,7 +4,6 @@
 #import <Foundation/Foundation.h>
 #import <Metal/Metal.h>
 
-#include <stddef.h>
 #include "compute_pipeline.h"
 #include "domain.h"
 #include "flow_field.h"
@@ -36,8 +35,8 @@ extern int process_on_gpu_check_divergence(
 
 extern int process_on_cpu_check_divergence(
     check_divergence_data_t * const check_divergence_data,
-    const size_t step,
-    const double time
+    double * const total_divergence,
+    double * const max_divergence
 );
 
 #endif // CHECK_DIVERGENCE_H

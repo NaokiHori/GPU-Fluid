@@ -15,9 +15,8 @@ inline void tdma_y(
   if (nx <= i) {
     return;
   }
-  // NOTE: scratchpad should use NX as stencil size
-  //   to avoid race between ux/uy/temperature executions
-#define SCRATCHPAD(j) scratchpad[(j) * NX + i]
+#define SCRATCHPAD(j) scratchpad[(j) * nx + (i)]
+#define INOUT(j) inout[(j) * nx + (i)]
   {
     const uint j = 0;
     const float lower_diagonal = off_diagonal_prefactor * lower_diagonals[j]; // NOTE: to impose BC
@@ -25,7 +24,7 @@ inline void tdma_y(
     const float main_diagonal = 1.f - lower_diagonal - upper_diagonal;
     const float main_diagonal_inv = 1.f / main_diagonal;
     SCRATCHPAD(j) = upper_diagonal * main_diagonal_inv;
-    inout[j * nx + i] *= main_diagonal_inv;
+    INOUT(j) *= main_diagonal_inv;
   }
   for (uint j = 1; j < ny - 1; j++) {
     const float lower_diagonal = off_diagonal_prefactor * lower_diagonals[j];
@@ -33,7 +32,7 @@ inline void tdma_y(
     const float main_diagonal = 1.f - lower_diagonal - upper_diagonal;
     const float denominator_inv = 1.f / (main_diagonal - lower_diagonal * SCRATCHPAD(j - 1));
     SCRATCHPAD(j) = upper_diagonal * denominator_inv;
-    inout[j * nx + i] = (inout[j * nx + i] - lower_diagonal * inout[(j - 1) * nx + i]) * denominator_inv;
+    INOUT(j) = (INOUT(j) - lower_diagonal * INOUT(j - 1)) * denominator_inv;
   }
   {
     const uint j = ny - 1;
@@ -42,10 +41,10 @@ inline void tdma_y(
     const float main_diagonal = 1.f - lower_diagonal - upper_diagonal;
     const float denominator = main_diagonal - lower_diagonal * SCRATCHPAD(j - 1);
     // NOTE: assuming full rank matrix
-    inout[j * nx + i] = (inout[j * nx + i] - lower_diagonal * inout[(j - 1) * nx + i]) / denominator;
+    INOUT(j) = (INOUT(j) - lower_diagonal * INOUT(j - 1)) / denominator;
   }
   for (int j = ny - 2; j >= 0; j--) {
-    inout[j * nx + i] -= SCRATCHPAD(j) * inout[(j + 1) * nx + i];
+    INOUT(j) -= SCRATCHPAD(j) * INOUT(j + 1);
   }
 }
 

@@ -1,4 +1,3 @@
-#include <assert.h>
 #include "memory.h"
 #include "shared_buffer.h"
 #include "./solve_poisson_x.h"
@@ -11,7 +10,6 @@ static int fft_plan_initialize(
     id<MTLBuffer> mtl_buffer_spectral,
     fft_plan_t * const plan
 ) {
-  assert(0 == nx % 2);
   const NSUInteger nxh = nx / 2 + 1;
   // tensor data used by forward and backward
   MPSGraphTensorData * const tensor_data_physical = [
@@ -58,7 +56,7 @@ static int fft_plan_initialize(
     MPSGraphFFTDescriptor * const desc = [MPSGraphFFTDescriptor descriptor];
     desc.inverse = YES;
     desc.scalingMode = MPSGraphFFTScalingModeSize;
-    desc.roundToOddHermitean = NO;
+    desc.roundToOddHermitean = 1 == nx / 2;
     MPSGraphTensor *tensor_output = [
       graph
         HermiteanToRealFFTWithTensor:tensor_input

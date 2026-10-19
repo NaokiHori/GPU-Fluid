@@ -16,7 +16,7 @@
 typedef struct {
   // common
   id<MTLBuffer> buf;
-  // x: gemm
+  // x: fft
   solve_poisson_x_data_t solve_poisson_x_data;
   // y: tdma
   solve_poisson_y_data_t solve_poisson_y_data;

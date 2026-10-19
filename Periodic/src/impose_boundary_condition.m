@@ -47,10 +47,8 @@ static int impose_boundary_condition_x(
   [encoder setBuffer:flow_field->temperature offset:0 atIndex:2];
   [encoder setBuffer:flow_field->p offset:0 atIndex:3];
   //
-  MTLSize grid_size = MTLSizeMake(ny + 2, 1, 1);
-  NSUInteger max_threads = [compute_pipeline->pipeline_state maxTotalThreadsPerThreadgroup];
-  NSUInteger thread_group_size_value = MIN(ny + 2, max_threads);
-  MTLSize thread_group_size = MTLSizeMake(thread_group_size_value, 1, 1);
+  MTLSize grid_size = MTLSizeMake(1, ny + 2, 1);
+  MTLSize thread_group_size = MTLSizeMake(1, 128, 1);
   [encoder dispatchThreads:grid_size threadsPerThreadgroup:thread_group_size];
   return 0;
 }
@@ -69,9 +67,7 @@ static int impose_boundary_condition_y(
   [encoder setBuffer:flow_field->p offset:0 atIndex:3];
   //
   MTLSize grid_size = MTLSizeMake(nx + 2, 1, 1);
-  NSUInteger max_threads = [compute_pipeline->pipeline_state maxTotalThreadsPerThreadgroup];
-  NSUInteger thread_group_size_value = MIN(nx + 2, max_threads);
-  MTLSize thread_group_size = MTLSizeMake(thread_group_size_value, 1, 1);
+  MTLSize thread_group_size = MTLSizeMake(128, 1, 1);
   [encoder dispatchThreads:grid_size threadsPerThreadgroup:thread_group_size];
   return 0;
 }

@@ -82,9 +82,7 @@ int solve_implicit_y(
   [encoder setBuffer:flow_solver->scalar_potential offset:0 atIndex:11]; // NOTE: used as a scratchpad
   //
   MTLSize grid_size = MTLSizeMake(nx, 1, 1);
-  NSUInteger max_threads = [solve_implicit_y_data->compute_pipeline.pipeline_state maxTotalThreadsPerThreadgroup];
-  NSUInteger thread_group_size_value = MIN(nx, max_threads);
-  MTLSize thread_group_size = MTLSizeMake(thread_group_size_value, 1, 1);
+  MTLSize thread_group_size = MTLSizeMake(128, 1, 1);
   [encoder dispatchThreads:grid_size threadsPerThreadgroup:thread_group_size];
   return 0;
 }

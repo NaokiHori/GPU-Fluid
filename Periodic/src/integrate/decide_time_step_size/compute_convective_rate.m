@@ -51,12 +51,12 @@ int compute_convective_rate(
       compute_convective_rate_data->threadgroup_height,
       1
   );
-  MTLSize groupsSize = MTLSizeMake(
+  MTLSize groups_size = MTLSizeMake(
       compute_convective_rate_data->num_groups_x,
       compute_convective_rate_data->num_groups_y,
       1
   );
-  [encoder dispatchThreadgroups:groupsSize threadsPerThreadgroup:thread_group_size];
+  [encoder dispatchThreadgroups:groups_size threadsPerThreadgroup:thread_group_size];
   return 0;
 }
 

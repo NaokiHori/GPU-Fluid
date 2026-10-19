@@ -14,35 +14,37 @@ kernel void solve_poisson_y(
   if (nxh <= i) {
     return;
   }
+#define Q(j) q[(j) * (nxh) + (i)]
+#define TMPS(j) tmps[(j) * (nxh) + (i)]
   const float eigenvalue = eigenvalues[i];
   const float lower_diagonal = lower_diagonals[0]; // NOTE: to impose BC
   const float upper_diagonal = upper_diagonals[0];
   const float main_diagonal = - lower_diagonal - upper_diagonal + eigenvalue;
-  tmps[0 * nxh + i] = upper_diagonal / main_diagonal;
-  q[0 * nxh + i] /= main_diagonal;
+  TMPS(0) = upper_diagonal / main_diagonal;
+  Q(0) /= main_diagonal;
   for (int j = 1; j < NY - 1; j++) {
     const float lower_diagonal = lower_diagonals[j];
     const float upper_diagonal = upper_diagonals[j];
     const float main_diagonal = - lower_diagonal - upper_diagonal + eigenvalue;
-    const float m = 1.f / (main_diagonal - lower_diagonal * tmps[(j - 1) * nxh + i]);
-    tmps[j * nxh + i] = upper_diagonal * m;
-    q[j * nxh + i] = (q[j * nxh + i] - lower_diagonal * q[(j - 1) * nxh + i]) * m;
+    const float m = 1.f / (main_diagonal - lower_diagonal * TMPS(j - 1));
+    TMPS(j) = upper_diagonal * m;
+    Q(j) = (Q(j) - lower_diagonal * Q(j - 1)) * m;
   }
   {
     const int j = NY - 1;
     const float lower_diagonal = lower_diagonals[j];
     const float upper_diagonal = upper_diagonals[j]; // NOTE: to impose BC
     const float main_diagonal = - lower_diagonal - upper_diagonal + eigenvalue;
-    const float denominator = main_diagonal - lower_diagonal * tmps[(j - 1) * nxh + i];
+    const float denominator = main_diagonal - lower_diagonal * TMPS(j - 1);
     // NOTE: assuming i = 0 stores zero eigenvalue
     if (0 == i) {
-      q[j * nxh + i] = 0.f;
+      Q(j) = 0.f;
     } else {
-      q[j * nxh + i] = (q[j * nxh + i] - lower_diagonal * q[(j - 1) * nxh + i]) / denominator;
+      Q(j) = (Q(j) - lower_diagonal * Q(j - 1)) / denominator;
     }
   }
   for (int j = NY - 2; j >= 0; j--) {
-    q[j * nxh + i] -= tmps[j * nxh + i] * q[(j + 1) * nxh + i];
+    Q(j) -= TMPS(j) * Q(j + 1);
   }
 }
 

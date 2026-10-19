@@ -51,6 +51,7 @@ int solve_poisson_y(
     id<MTLBuffer> buf_tmp
 ) {
   const size_t nx = domain->x_coordinate.nitems;
+  const size_t nxh = nx / 2 + 1;
   id<MTLComputeCommandEncoder> encoder = [command_buffer computeCommandEncoder];
   [encoder setComputePipelineState:solve_poisson_y_data->compute_pipeline.pipeline_state];
   [encoder setBuffer:solve_poisson_y_data->lower_diagonals offset:0 atIndex:0];
@@ -59,10 +60,8 @@ int solve_poisson_y(
   [encoder setBuffer:buf_rhs offset:0 atIndex:3];
   [encoder setBuffer:buf_tmp offset:0 atIndex:4];
   //
-  MTLSize grid_size = MTLSizeMake(nx, 1, 1);
-  NSUInteger max_threads = [solve_poisson_y_data->compute_pipeline.pipeline_state maxTotalThreadsPerThreadgroup];
-  NSUInteger thread_group_size_value = MIN(nx, max_threads);
-  MTLSize thread_group_size = MTLSizeMake(thread_group_size_value, 1, 1);
+  MTLSize grid_size = MTLSizeMake(nxh, 1, 1);
+  MTLSize thread_group_size = MTLSizeMake(128, 1, 1);
   [encoder dispatchThreads:grid_size threadsPerThreadgroup:thread_group_size];
   [encoder endEncoding];
   return 0;

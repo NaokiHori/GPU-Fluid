@@ -31,3 +31,11 @@ pyplot.show()
 pyplot.close()
 ```
 
+## Method
+
+- Finite-difference method (second-order accurate central-difference scheme)
+- Fractional-step method
+- Three-stage Runge-Kutta integrator
+- Fully-explicit treatment in x, semi-implicit treatment (Crank-Nicolson scheme) in y
+- FFT-based eigendecomposition in x, Thomas algorithm in y to solve Poisson equations
+

@@ -62,12 +62,12 @@ int process_on_gpu_check_divergence(
       check_divergence_data->threadgroup_height,
       1
   );
-  MTLSize groupsSize = MTLSizeMake(
+  MTLSize groups_size = MTLSizeMake(
       check_divergence_data->num_groups_x,
       check_divergence_data->num_groups_y,
       1
   );
-  [encoder dispatchThreadgroups:groupsSize threadsPerThreadgroup:thread_group_size];
+  [encoder dispatchThreadgroups:groups_size threadsPerThreadgroup:thread_group_size];
   return 0;
 }
 

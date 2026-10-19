@@ -23,7 +23,7 @@ static int init_uy(
 ) {
   const size_t nx = domain->x_coordinate.nitems;
   const size_t ny = domain->y_coordinate.nitems;
-  float * const ptr_uy = (float *)[uy contents];
+  float * const ptr_uy = [uy contents];
   for (size_t j = 2; j <= ny; j++) {
     for (size_t i = 1; i <= nx; i++) {
       ptr_uy[j * (nx + 2) + i] = 0.f;
@@ -38,7 +38,7 @@ static int init_p(
 ) {
   const size_t nx = domain->x_coordinate.nitems;
   const size_t ny = domain->y_coordinate.nitems;
-  float * const ptr_p = (float *)[p contents];
+  float * const ptr_p = [p contents];
   for (size_t j = 1; j <= ny; j++) {
     for (size_t i = 1; i <= nx; i++) {
       ptr_p[j * (nx + 2) + i] = 0.f;
@@ -53,7 +53,7 @@ static int init_temperature(
 ) {
   const size_t nx = domain->x_coordinate.nitems;
   const size_t ny = domain->y_coordinate.nitems;
-  float * const ptr_temperature = (float *)[temperature contents];
+  float * const ptr_temperature = [temperature contents];
   const float amplitude = 1.e-2f;
   for (size_t j = 1; j <= ny; j++) {
     for (size_t i = 1; i <= nx; i++) {

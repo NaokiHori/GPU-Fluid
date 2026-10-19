@@ -2,6 +2,8 @@
 
 GPGPU Direct Numerical Simulator on Apple Silicon.
 
+[![cover image](./cover.jpg)](https://youtu.be/kJgnSuhNjII)
+
 ## Features
 
 - Designed exclusively for Apple Silicon leveraging unified memory architecture.

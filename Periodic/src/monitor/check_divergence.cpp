@@ -34,7 +34,7 @@ kernel void check_divergence(
     );
     const float divergence = duxdx + duydy;
     *local_divergence_sum = divergence * HX * hy;
-    *local_divergence_max = divergence;
+    *local_divergence_max = fabs(divergence);
   }
   threadgroup_barrier(mem_flags::mem_threadgroup);
   for (uint s = THREADGROUP_WIDTH * THREADGROUP_HEIGHT / 2; 0 < s; s >>= 1) {

@@ -87,7 +87,7 @@ static int init_temperature(
     for (size_t j = 1; j <= ny; j++) {
       for (size_t i = 1; i <= nx; i++) {
         ptr_temperature[k * (ny + 2) * (nx + 2) + j * (nx + 2) + i] =
-          amplitude * (- 0.5f + 1.f * rand() / RAND_MAX);
+          amplitude * (- 0.5 + 1. * rand() / RAND_MAX);
       }
     }
   }

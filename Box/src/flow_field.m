@@ -57,7 +57,7 @@ static int init_temperature(
   const float amplitude = 1.e-2f;
   for (size_t j = 1; j <= ny; j++) {
     for (size_t i = 1; i <= nx; i++) {
-      ptr_temperature[j * (nx + 2) + i] = amplitude * (- 0.5f + 1.f * rand() / RAND_MAX);
+      ptr_temperature[j * (nx + 2) + i] = amplitude * (- 0.5 + 1. * rand() / RAND_MAX);
     }
   }
   return 0;

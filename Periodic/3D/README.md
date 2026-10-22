@@ -10,5 +10,6 @@ make all
 ./a.out
 ```
 
-The resulting flow fields are written to `output/save` with `NPY` format, which can be visualized using a dedicated visualizer.
+The resulting flow fields are written to `output/save` with `NPY` format.
+Volume-rendered images are dumped to `output/image` with `PPM` format.
 

@@ -11,10 +11,12 @@
 #include "./integrate.h"
 #include "./monitor.h"
 #include "./save.h"
+#include "./visualize.h"
 
 typedef struct {
   size_t monitor;
   size_t save;
+  size_t visualize;
 } schedule_t;
 
 int main(
@@ -36,6 +38,16 @@ int main(
     }
     flow_solver_t flow_solver = {0};
     if (0 != flow_solver_initialize(device, &domain, &flow_solver)) {
+      return 1;
+    }
+    visualize_data_t visualize_data = {0};
+    if (0 != visualize_data_initialize(
+        device,
+        &domain,
+        1920, // image width
+        1080, // image height
+        &visualize_data
+    )) {
       return 1;
     }
     // prepare shared buffer and peripheral stuffs
@@ -84,6 +96,7 @@ int main(
     const schedule_t rate = {
       .monitor = 100,
       .save = 10000,
+      .visualize = 100,
     };
     schedule_t next = rate;
     for (double time = 0.; time < time_max; ) {
@@ -110,6 +123,11 @@ int main(
         save(directory_index, step, time, &domain, &flow_field);
         directory_index += 1;
         next.save += rate.save;
+      }
+      if (next.visualize < step) {
+        static size_t file_index = 0;
+        visualize(queue, &domain, &visualize_data, file_index, &flow_field);
+        file_index += 1;
       }
     }
   }

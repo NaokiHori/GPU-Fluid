@@ -13,8 +13,8 @@
 #include "./save.h"
 
 typedef struct {
-  double monitor;
-  double save;
+  size_t monitor;
+  size_t save;
 } schedule_t;
 
 int main(
@@ -82,8 +82,8 @@ int main(
     const double time_max = 2.e+1;
     const float diffusivity = 5e-5f;
     const schedule_t rate = {
-      .monitor = 5.e-1,
-      .save = 1.e+1,
+      .monitor = 100,
+      .save = 1000,
     };
     schedule_t next = rate;
     for (double time = 0.; time < time_max; ) {
@@ -101,11 +101,11 @@ int main(
           &time
       );
       // post process
-      if (next.monitor < time) {
+      if (next.monitor < step) {
         monitor(queue, &monitor_data, step, time, &domain, &flow_field);
         next.monitor += rate.monitor;
       }
-      if (next.save < time) {
+      if (next.save < step) {
         static size_t directory_index = 0;
         save(directory_index, step, time, &domain, &flow_field);
         directory_index += 1;

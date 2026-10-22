@@ -8,7 +8,6 @@
 #include "domain.h"
 #include "flow_field.h"
 #include "flow_solver.h"
-#include "impose_boundary_condition.h"
 #include "./runge_kutta.h"
 #include "./predict_field/integrate_field.h"
 #include "./predict_field/update_field.h"
@@ -26,7 +25,6 @@ extern int predict_field_data_initialize(
 
 extern int predict_field(
     const domain_t * const domain,
-    impose_boundary_condition_data_t * const impose_boundary_condition_data,
     predict_field_data_t * const predict_field_data,
     id<MTLComputeCommandEncoder> encoder,
     const runge_kutta_coefficient_t * const runge_kutta_coefficient,

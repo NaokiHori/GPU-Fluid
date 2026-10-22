@@ -79,7 +79,6 @@ int integrate(
         }
         predict_field(
             domain,
-            impose_boundary_condition_data,
             &integrate_data->predict_field_data,
             encoder,
             runge_kutta_coefficients + runge_kutta_step,
@@ -87,6 +86,12 @@ int integrate(
             diffusivity,
             flow_field,
             flow_solver
+        );
+        impose_boundary_condition(
+            domain,
+            impose_boundary_condition_data,
+            encoder,
+            flow_field
         );
         [encoder endEncoding];
       }

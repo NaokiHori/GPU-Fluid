@@ -76,7 +76,6 @@ int integrate(
       id<MTLBuffer> mtl_buffer_dt = integrate_data->decide_time_step_size_data.mtl_buffer_dt;
       predict_field(
           domain,
-          impose_boundary_condition_data,
           &integrate_data->predict_field_data,
           encoder,
           runge_kutta_coefficients + runge_kutta_step,
@@ -84,6 +83,12 @@ int integrate(
           diffusivity,
           flow_field,
           flow_solver
+      );
+      impose_boundary_condition(
+          domain,
+          impose_boundary_condition_data,
+          encoder,
+          flow_field
       );
       solve_poisson(
           domain,

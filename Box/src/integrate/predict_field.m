@@ -24,7 +24,6 @@ int predict_field_data_initialize(
 
 int predict_field(
     const domain_t * const domain,
-    impose_boundary_condition_data_t * const impose_boundary_condition_data,
     predict_field_data_t * const predict_field_data,
     id<MTLComputeCommandEncoder> encoder,
     const runge_kutta_coefficient_t * const runge_kutta_coefficient,
@@ -52,12 +51,6 @@ int predict_field(
       diffusivity,
       flow_field,
       flow_solver
-  );
-  impose_boundary_condition(
-      domain,
-      impose_boundary_condition_data,
-      encoder,
-      flow_field
   );
   return 0;
 }

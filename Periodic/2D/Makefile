@@ -34,6 +34,7 @@ $(OBJDIR)/%.m.o: $(SRCDIR)/%.m
 	$(CC) $(CFLAG) -MMD $(INC) -c $< -o $@
 
 output:
+	@mkdir -p $(OUTDIR)/image;
 	@mkdir -p $(OUTDIR)/log;
 	@mkdir -p $(OUTDIR)/save;
 

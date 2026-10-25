@@ -80,6 +80,7 @@ int solve_poisson_x_data_initialize(
     return 1;
   }
   if (0 != sort_eigendecomposition(nx, compare_eigen_pairs, d_eigenvalues, eigenvectors_transposed)) {
+    return 1;
   }
   float * const ptr_eigenvalues = [*eigenvalues contents];
   for (size_t n = 0; n < nx; n++) {

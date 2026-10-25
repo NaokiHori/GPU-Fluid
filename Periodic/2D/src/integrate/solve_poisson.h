@@ -14,14 +14,16 @@
 #include "./solve_poisson/solve_poisson_y.h"
 
 typedef struct {
-  // common
-  id<MTLBuffer> buf;
   // x: fft
   solve_poisson_x_data_t solve_poisson_x_data;
   // y: tdma
   solve_poisson_y_data_t solve_poisson_y_data;
   // setup
   compute_right_hand_side_data_t compute_right_hand_side_data;
+  // input and output
+  id<MTLBuffer> values;
+  // pre-computed values of system
+  id<MTLBuffer> inverse_values;
 } solve_poisson_data_t;
 
 extern int solve_poisson_data_initialize(
@@ -37,7 +39,7 @@ extern int solve_poisson(
     MPSCommandBuffer * const command_buffer,
     const runge_kutta_coefficient_t * const runge_kutta_coefficient,
     id<MTLBuffer> mtl_buffer_dt,
-    flow_field_t * const flow_field,
+    const flow_field_t * const flow_field,
     flow_solver_t * const flow_solver
 );
 

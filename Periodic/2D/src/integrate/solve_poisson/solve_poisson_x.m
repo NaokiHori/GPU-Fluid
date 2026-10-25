@@ -1,5 +1,4 @@
 #include "memory.h"
-#include "shared_buffer.h"
 #include "./solve_poisson_x.h"
 
 static int fft_plan_initialize(
@@ -71,7 +70,6 @@ static int fft_plan_initialize(
 }
 
 int solve_poisson_x_data_initialize(
-    id<MTLDevice> device,
     const domain_t * const domain,
     id<MTLBuffer> physical_buffer,
     id<MTLBuffer> spectral_buffer,
@@ -80,11 +78,10 @@ int solve_poisson_x_data_initialize(
   const double lx = domain->x_coordinate.length;
   const size_t nx = domain->x_coordinate.nitems;
   const size_t ny = domain->y_coordinate.nitems;
-  id<MTLBuffer> * const eigenvalues = &solve_poisson_x_data->eigenvalues;
-  *eigenvalues = create_shared_buffer(device, nx * sizeof(float));
-  float * const ptr_eigenvalues = [*eigenvalues contents];
+  double ** const eigenvalues = &solve_poisson_x_data->eigenvalues;
+  *eigenvalues = memory_alloc(nx, sizeof(double));
   for (size_t n = 0; n < nx; n++) {
-    ptr_eigenvalues[n] = - pow(2. / lx * nx * sin(M_PI * n / nx), 2.);
+    (*eigenvalues)[n] = - pow(2. / lx * nx * sin(M_PI * n / nx), 2.);
   }
   MPSGraph ** const graph = &solve_poisson_x_data->graph;
   *graph = [MPSGraph new];

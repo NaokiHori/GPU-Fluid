@@ -19,11 +19,10 @@ typedef struct {
 typedef struct {
   MPSGraph * graph;
   fft_plan_t fft_plan;
-  id<MTLBuffer> eigenvalues;
+  double * eigenvalues;
 } solve_poisson_x_data_t;
 
 extern int solve_poisson_x_data_initialize(
-    id<MTLDevice> device,
     const domain_t * const domain,
     id<MTLBuffer> physical_buffer,
     id<MTLBuffer> spectral_buffer,
